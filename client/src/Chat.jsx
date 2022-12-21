@@ -15,7 +15,7 @@ const client = new ApolloClient({
 const Chat = () => {
   return (
     <Container>
-        <Messages user="John"/>
+        <Messages user="Sam"/>
     </Container>
   )
 }
