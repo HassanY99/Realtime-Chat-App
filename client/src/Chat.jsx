@@ -2,6 +2,9 @@ import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider, useQuery, gql } from '@apollo/client';
 import Messages from './Messages';
 
+// Chards imp
+import { Container } from 'shards-react';
+
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
   cache: new InMemoryCache(),
@@ -11,9 +14,9 @@ const client = new ApolloClient({
 
 const Chat = () => {
   return (
-    <div>
+    <Container>
         <Messages user="John"/>
-    </div>
+    </Container>
   )
 }
 
