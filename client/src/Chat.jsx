@@ -1,5 +1,6 @@
 import React from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider, useQuery, gql } from '@apollo/client';
+import Messages from './Messages';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -11,7 +12,7 @@ const client = new ApolloClient({
 const Chat = () => {
   return (
     <div>
-      Hi I am chat component.
+        <Messages user="John"/>
     </div>
   )
 }
