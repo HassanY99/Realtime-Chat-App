@@ -1,11 +1,16 @@
-const { createServer } = require('http');
-const { createSchema, createYoga } = require('graphql-yoga')
+const { createServer } = require('node:http');
+const { createSchema, createYoga, createPubSub } = require('graphql-yoga')
+// import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = createPubSub();
 
 
 const messages = [];
 
-createServer(
-    createYoga({
+// const pubSub = createPubSub();
+
+
+const yoga = createYoga({
       schema: createSchema({
         typeDefs: /* GraphQL */ `
         type Message {
@@ -21,6 +26,10 @@ createServer(
         type Mutation {
             postMessage(user: String!, text: String!): ID!
         }
+
+        type Subscription {
+            messages: [Message!]
+        }
         `,
      // Now Get the "DATA";
         resolvers: {
@@ -29,19 +38,26 @@ createServer(
           },
         //   Post request
           Mutation: {
-            postMessage : (parent, {user, text}) => {
+            postMessage : (_, {user, text}) => {
+                pubSub.publish("postMessage", messages);
                 const id = messages.length;
                 messages.push({
-                    id,
-                    user,
-                    text
-                });
+                    id, user, text
+                })
                 return id;
             }
-        }
-    },
+        },
+        Subscription: {
+            messages: {
+                subscribe: () => pubSub.subscribe("postMessage"),
+                resolve: (payload) => payload,
+              },
+            }
+          }
+        })
       })
-    })
-  ).listen(4000, () => {
-    console.log('GraphQL Yoga is listening on http://localhost:4000/graphql')
-  });
+
+ const server = createServer(yoga)
+ server.listen(4000, () => { 
+    console.info('Server is running on http://localhost:4000/graphql')
+});
