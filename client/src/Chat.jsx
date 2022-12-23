@@ -1,12 +1,21 @@
 import React, { useState } from 'react'
 import { ApolloClient, InMemoryCache, ApolloProvider, gql, useMutation } from '@apollo/client';
 import Messages from './Messages';
+import { WebSocketLink } from "@apollo/client/link/ws";
 
 // Chards imp
 import { Container, Row, Col, FormInput, Button } from 'shards-react';
 
+const link = new WebSocketLink({
+  uri: `ws://localhost:4000/`,
+  options: {
+    reconnect: true,
+  },
+});
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  link,
+  uri: "http://localhost:4000/",
   cache: new InMemoryCache(),
 });
 
@@ -42,7 +51,7 @@ const Chat = () => {
   return (
     <Container>
         <Messages user={state.user}/>
-        <Row>
+        <Row style={{padding: 20 }}>
             {/* User can change name */}
             <Col xs={2} style={{padding: 0 }}>
                 <FormInput 

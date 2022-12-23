@@ -1,19 +1,19 @@
 import React from 'react'
-import { useQuery, gql } from '@apollo/client';
+import { gql, useQuery, useSubscription } from '@apollo/client';
 
-const GET_MESSAGES = gql `
-query {
-    messages {
-      id
-      text
-      user
+const GET_MESSAGES = gql`
+    subscription {
+        messages {
+            id
+            user
+            text
     }
-  }
+}
 `;
 
 const Messages = ({ user }) => {
 
-        const { data } = useQuery(GET_MESSAGES);
+        const { data } = useSubscription(GET_MESSAGES);
 
         if(!data) {
             return null;
@@ -26,8 +26,7 @@ const Messages = ({ user }) => {
                     style={{
                         display: 'flex',
                         justifyContent: user === messageUser ? 'flex-end' : 'flex-start',
-                        paddingBottom : '1em',
-                        paddingTop: '10px'
+                        paddingTop: '3px'
                     }}>
                         {/* Get the first two letters of the user name */}
                         {user !== messageUser && (
@@ -53,8 +52,8 @@ const Messages = ({ user }) => {
                         style={{
                             background: user === messageUser ? '#2E8BC0' : '#B9B7BD',
                             color: user === messageUser ? "white" : "black",
-                            borderRadius: "1em",
-                            padding: '1em',
+                            borderRadius: "14px",
+                            padding: "12px",
                             maxWidth: '60%'
                         }}>
                             {text}
