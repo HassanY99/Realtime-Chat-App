@@ -1,5 +1,5 @@
 import React from 'react'
-import { gql, useQuery, useSubscription } from '@apollo/client';
+import { gql, useSubscription } from '@apollo/client';
 
 const GET_MESSAGES = gql`
     subscription {
